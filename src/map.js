@@ -87,7 +87,7 @@ function request_tile(x,y,zoom,element) {
     request.send();
 };
 window.onload = function(){
-    var canvas = document.getElementById("canvas11");
+    var canvas = document.getElementById("canvas");
     updateOrigin(geoCoords.lat,geoCoords.lon,geoCoords.zoom);
     console.log(request_path(landmark,crown));
     console.log(waypoint);
@@ -157,8 +157,8 @@ function tile2lat(y,z) {
 }
 
 function draw(x,y,canvas) {
-    canvas.height = 256;
-    canvas.width = 256;
+    canvas.height = 256 * 3;
+    canvas.width = 256 * 3;
     var ctx = canvas.getContext("2d");
     ctx.beginPath();
     ctx.moveTo(x*256,0);
@@ -167,19 +167,20 @@ function draw(x,y,canvas) {
     ctx.lineTo(256,y * 256);
     ctx.stroke();
 }
+//TODO: draw overlay on all canvases
 function drawOverlay() {
-    let poi = find_map_center();
-    let geo_lon_low_bound = tile2long(mapCoords.x,mapCoords.zoom);
-    let geo_lon_high_bound = tile2long(mapCoords.x + 1,mapCoords.zoom);
-    let geo_lat_high_bound = tile2lat(mapCoords.y,mapCoords.zoom);
-    let geo_lat_low_bound = tile2lat(mapCoords.y + 1,mapCoords.zoom);
+    let poi = glassboro;
+    let geo_lon_low_bound = tile2long(mapCoords.x - 1,mapCoords.zoom);
+    let geo_lon_high_bound = tile2long(mapCoords.x + 2,mapCoords.zoom);
+    let geo_lat_high_bound = tile2lat(mapCoords.y - 1,mapCoords.zoom);
+    let geo_lat_low_bound = tile2lat(mapCoords.y + 2,mapCoords.zoom);
     let lat_offset = poi.lat - tile2lat(mapCoords.y,mapCoords.zoom);
-    let lat_arc = tile2lat(mapCoords.y + 1, mapCoords.zoom) - tile2lat(mapCoords.y, mapCoords.zoom);
+    let lat_arc = tile2lat(mapCoords.y + 2, mapCoords.zoom) - tile2lat(mapCoords.y - 1, mapCoords.zoom);
     let lon_offset = poi.lon - geo_lon_low_bound;
     let lon_arc = tile2long(mapCoords.x + 1, mapCoords.zoom) - geo_lon_low_bound;
     let x_offset = lon_offset/lon_arc;
     let y_offset = lat_offset/lat_arc;
-    let canvas = document.getElementById("canvas11");
+    let canvas = document.getElementById("canvas");
     //TODO:fix to use absolute landmarks
     if(poi.lat > geo_lat_low_bound && poi.lat < geo_lat_high_bound
         && poi.lon > geo_lon_low_bound && poi.lon < geo_lon_high_bound){

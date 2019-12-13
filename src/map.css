@@ -1,6 +1,6 @@
-.tile_wrapper{
-    width: 256px;
-    height: 256px;
+.map{
+    width: 768px;
+    height: 768px;
     position: relative;
 }
 .tile_image{

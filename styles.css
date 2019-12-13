@@ -1,0 +1,162 @@
+.header{
+	text-align: center;
+	background: #000000;
+	margin-top:  -20px;
+	margin-right: auto;
+	margin-right: auto;
+	margin-bottom: -22px;
+	border-bottom: 3px solid #9050ed; 
+}
+.headerContent{
+	background-color: #000000;
+	margin-right: -10px;
+	margin-left: -10px;
+	margin-top: -20px;
+	display: flex;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	
+}
+.logo{
+	margin-left: 140px;
+}
+.home{
+	margin-top: 12px;
+	margin-left: 240px;
+}
+.contact_us{
+	margin-top: 12px;
+	margin-left:160px;
+}
+.about_us{
+	margin-top: 12px;
+	margin-left: 160px;
+}
+.map{
+	margin-left: -10px;
+	margin-right: -10px;
+	margin-bottom: -12px;
+}
+.columnOne{
+	margin-left: 30px;
+	margin-top: 25px;
+	float: left;
+	width: 30.0%;
+}
+
+.footerText{
+        padding-top: 10px;
+        font-size: 20px;
+        line-height: 18px;
+        font-weight: normal;
+}
+.contact{
+        font-size: 22px;
+        line-height: 20px;
+        font-weight: bolder;
+}
+.contact-info{
+        color: #ffffff;
+        font-style: italic;
+        font-weight: normal;
+}
+
+.columnTwo{
+	padding-left: 20px;
+	margin-top: 25px;
+	border-left: 1px solid white;
+        height: 280px; 	
+	text-align: center;
+	display: inline-block;
+	width: 30%;
+	margin-left: 90px;
+	
+}
+.columnText{
+	font-size: 160%;
+}
+.columnThree{
+	margin-right: 30px;
+	margin-top: 25px;
+	border-left: 1px solid white;
+	height: 280px;
+	text-align: right;
+	float: right;
+	width: 30%;
+	margin-left: 10px;
+}
+.links{
+	font-size: 150%;
+	list-style: none;
+        padding: 0;
+}
+.links li{
+	font-size: 70%;
+        line-height: 25px;
+}
+
+.row:after {
+	content: "";
+	display: table;
+	clear: both;
+	}
+.footer{
+	
+	margin-left: -10px;
+	margin-right: -10px;
+	background-color: #000000;
+}
+.footerContent{
+	margin-top: -8px;
+	padding-bottom: 5em;
+	color: #ffffff;
+	font-size: 12px;
+	line-height: 16px;
+	margin-bottom: -12px;
+}
+.footerContent h3{
+	color: #ffffff;
+	font-size: 24px;
+	line-height: 30px;
+	margin-top: 62px;
+}
+.social{
+	display: flex;
+	justify-content: space-between;
+	margin-top: 35px;
+}
+a, a:visited{
+	color: #ffffff;
+	text-decoration: none;
+}
+a:hover, a:active{
+	color: #0e44f1;
+}
+.mainContent {
+	margin-top: -38px;
+	margin-bottom: -20px;
+	margin-left: -10px;
+	margin-right: -10px;
+	background-color: #000000;	
+}
+.aboutUsTitle {
+	color: #ffffff; 
+	font-size: 200%;
+	text-align: center;
+}
+.drinkPhoto {
+	padding-bottom: 20px;
+	text-align: center;
+}
+.aboutUsText {
+	font-size: 125%;
+	margin-left: 40px;
+	color: #ffffff;
+}
+.form {
+
+	font-size: 150%;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	text-align: center;
+}

@@ -1,4 +1,4 @@
-.map{
+.tile_wrapper{
     width: 768px;
     height: 768px;
     position: relative;
@@ -10,7 +10,7 @@
     top:0px;
     left:0px;
 }
-.tile_canvas{
+tile_canvas{
     width: 100%;
     height: 100%;
     position: absolute;

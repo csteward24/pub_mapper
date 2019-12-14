@@ -38,6 +38,10 @@ var geoCoords = {
     lon: -75.121396,
     zoom: 13
 };
+var hannah = {
+    lat: 39.420357,
+    lon: -74.978147
+}
 //TODO:refactor to use geo coords natively
 function updateOrigin(lat,lon,zoom) {
     geoCoords.lat = lat;
@@ -110,7 +114,14 @@ window.onload = function(){
 async function drawPath_async(begin,end){
     await request_path_async(begin,end).then( value => {
         let canvas = document.getElementById("canvas");
-        drawPath(getPoint(glassboro), getPoint(landmark), canvas);
+        canvas.height = 256 * 3;
+        canvas.width = 256 * 3;
+        console.log(value);
+        value.forEach(function (item,index,array) {
+            drawPath(getPoint(array[index]),getPoint(array[index + 1]), canvas);
+            console.log(array[index]);
+        })
+        drawPath(getPoint(value[0]),getPoint(value[15]), canvas);
     })
 }
 function panLeft() {
@@ -159,7 +170,7 @@ function loadMap() {
     request_tile(mapCoords.x, mapCoords.y + 1,mapCoords.zoom,document.getElementById('image21'));
     request_tile(mapCoords.x + 1, mapCoords.y + 1,mapCoords.zoom,document.getElementById('image22'));
     let canvas = document.getElementById("canvas");
-    drawPath_async(landmark,glassboro);
+    drawPath_async(landmark,hannah);
 }
 
 function long2tile(lon,zoom) { return (Math.floor((lon+180)/360*Math.pow(2,zoom))); };
@@ -204,29 +215,26 @@ function drawPoint(point) {
     }
 }
 function getPoint(point) {
-    let poi = point;
     let geo_lon_low_bound = tile2long(mapCoords.x - 1,mapCoords.zoom);
     let geo_lon_high_bound = tile2long(mapCoords.x + 2,mapCoords.zoom);
     let geo_lat_high_bound = tile2lat(mapCoords.y - 1,mapCoords.zoom);
     let geo_lat_low_bound = tile2lat(mapCoords.y + 2,mapCoords.zoom);
-    let lat_offset = poi.lat - tile2lat(mapCoords.y - 1,mapCoords.zoom);
+    let lat_offset = point[1] - tile2lat(mapCoords.y - 1,mapCoords.zoom);
     let lat_arc = tile2lat(mapCoords.y + 2, mapCoords.zoom) - tile2lat(mapCoords.y - 1, mapCoords.zoom);
-    let lon_offset = poi.lon - geo_lon_low_bound;
+    let lon_offset = point[0] - geo_lon_low_bound;
     let lon_arc = tile2long(mapCoords.x + 2, mapCoords.zoom) - geo_lon_low_bound;
     let x_offset = lon_offset/lon_arc;
     let y_offset = lat_offset/lat_arc;
     let canvas = document.getElementById("canvas");
     //TODO:fix to use absolute landmarks
-    if(poi.lat > geo_lat_low_bound && poi.lat < geo_lat_high_bound
-        && poi.lon > geo_lon_low_bound && poi.lon < geo_lon_high_bound){
+    if(point[1] > geo_lat_low_bound && point[1] < geo_lat_high_bound
+        && point[0] > geo_lon_low_bound && point[0] < geo_lon_high_bound){
         return [x_offset,y_offset];
     }else{
         //canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     }
 }
 function drawPath([x1,y1],[x2,y2],canvas){
-    canvas.height = 256 * 3;
-    canvas.width = 256 * 3;
     console.log(x1);
     let ctx = canvas.getContext("2d");
     ctx.beginPath();

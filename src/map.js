@@ -95,11 +95,24 @@ function request_tile(x,y,zoom,element) {
     request.send();
 };
 window.onload = function(){
-    var canvas = document.getElementById("canvas");
+    //var canvas = document.getElementById("canvas");
     updateOrigin(geoCoords.lat,geoCoords.lon,geoCoords.zoom);
-    console.log(request_path_async(landmark,glassboro));
     loadMap();
+    /*
+    request_path_async(landmark,glassboro).then(val => {
+        console.log(val);
+        let canvas = document.getElementById("canvas")
+        //drawPoint(glassboro);
+        drawPath(getPoint(glassboro),getPoint(landmark),canvas);
+    });
+    */
 };
+async function drawPath_async(begin,end){
+    await request_path_async(begin,end).then( value => {
+        let canvas = document.getElementById("canvas");
+        drawPath(getPoint(glassboro), getPoint(landmark), canvas);
+    })
+}
 function panLeft() {
     mapCoords.x -= 1;
     loadMap();
@@ -146,14 +159,7 @@ function loadMap() {
     request_tile(mapCoords.x, mapCoords.y + 1,mapCoords.zoom,document.getElementById('image21'));
     request_tile(mapCoords.x + 1, mapCoords.y + 1,mapCoords.zoom,document.getElementById('image22'));
     let canvas = document.getElementById("canvas");
-    canvas.height = 256 * 3;
-    canvas.width = 256 * 3;
-    request_path(landmark,crown);
-    //drawPath(getPoint(landmark),getPoint(glassboro),canvas);
-    //drawPath(getPoint(bunce_cirle),getPoint(glassboro),canvas);
-    //console.log(waypoints[0]);
-    //console.log(waypoints[1]);
-    //drawPath(waypoints[0],waypoints[1],canvas);
+    drawPath_async(landmark,glassboro);
 }
 
 function long2tile(lon,zoom) { return (Math.floor((lon+180)/360*Math.pow(2,zoom))); };
@@ -219,6 +225,9 @@ function getPoint(point) {
     }
 }
 function drawPath([x1,y1],[x2,y2],canvas){
+    canvas.height = 256 * 3;
+    canvas.width = 256 * 3;
+    console.log(x1);
     let ctx = canvas.getContext("2d");
     ctx.beginPath();
     ctx.moveTo(x1*768,y1*768);

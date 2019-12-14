@@ -1,6 +1,6 @@
 .tile_wrapper{
-    width: 256px;
-    height: 256px;
+    width: 768px;
+    height: 768px;
     position: relative;
 }
 .tile_image{
@@ -16,7 +16,7 @@
     position: absolute;
     top:0px;
     left:0px;
-    /*background-color: rgba(255, 0, 0, 0.1);*/
+    /*background-color: rgba(255, 0, 0, 0.5);*/
 }
 .tile_row{
     display: flex;

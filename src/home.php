@@ -7,8 +7,20 @@
 	
 <body>
 <?php
-include 'header.php';
+	include 'header.php';
+
+
+	switch($_GET['page']){
+	case 'home.php':
+		include 'map.html';
+		break;
+	case 'contact_us.php':
+		include 'contactus.php';
+		break;
+	case 'about_us.php':
+		include 'about_us.php';
+		break;
+	}	
 ?>
-<?php include 'map.html' ?>
 </body>	
 </html>

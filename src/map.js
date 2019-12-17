@@ -113,7 +113,7 @@ async function drawPath_async(begin,end,canvas){
         let canvas = document.getElementById("canvas");
         canvas.height = 256 * document.getElementById("images").childElementCount;
         canvas.width = 256 * document.getElementById("row1").childElementCount;
-        console.log(value);
+        //console.log(value);
         value.forEach(function (item,index,array) {
             drawPath(getPoint(array[index]),getPoint(array[index + 1]), canvas);
             console.log(array[index]);
@@ -166,21 +166,21 @@ function find_map_center(){
     return {lat: center_y, lon: center_x};
 }
 function loadMap(canvas) {
-    request_tile(mapCoords.x - 1, mapCoords.y - 1,mapCoords.zoom,document.getElementById('image00'));
-    request_tile(mapCoords.x, mapCoords.y - 1,mapCoords.zoom,document.getElementById('image01'));
-    request_tile(mapCoords.x + 1, mapCoords.y - 1,mapCoords.zoom,document.getElementById('image02'));
-    request_tile(mapCoords.x + 2, mapCoords.y - 1,mapCoords.zoom,document.getElementById('image03'));
-    request_tile(mapCoords.x - 1, mapCoords.y,mapCoords.zoom,document.getElementById('image10'));
-    request_tile(mapCoords.x, mapCoords.y,mapCoords.zoom,document.getElementById('image11'));
-    request_tile(mapCoords.x + 1, mapCoords.y,mapCoords.zoom,document.getElementById('image12'));
-    request_tile(mapCoords.x + 2, mapCoords.y,mapCoords.zoom,document.getElementById('image13'));
-    request_tile(mapCoords.x - 1, mapCoords.y + 1,mapCoords.zoom,document.getElementById('image20'));
-    request_tile(mapCoords.x, mapCoords.y + 1,mapCoords.zoom,document.getElementById('image21'));
-    request_tile(mapCoords.x + 1, mapCoords.y + 1,mapCoords.zoom,document.getElementById('image22'));
-    request_tile(mapCoords.x + 2, mapCoords.y + 1,mapCoords.zoom,document.getElementById('image23'));
-    drawPath_async(glassboro,hannah,canvas);
-    drawPath_async(hannah,cadence,canvas);}
-
+    request_tile(mapCoords.x - 1, mapCoords.y - 1, mapCoords.zoom, document.getElementById('image00'));
+    request_tile(mapCoords.x, mapCoords.y - 1, mapCoords.zoom, document.getElementById('image01'));
+    request_tile(mapCoords.x + 1, mapCoords.y - 1, mapCoords.zoom, document.getElementById('image02'));
+    request_tile(mapCoords.x + 2, mapCoords.y - 1, mapCoords.zoom, document.getElementById('image03'));
+    request_tile(mapCoords.x - 1, mapCoords.y, mapCoords.zoom, document.getElementById('image10'));
+    request_tile(mapCoords.x, mapCoords.y, mapCoords.zoom, document.getElementById('image11'));
+    request_tile(mapCoords.x + 1, mapCoords.y, mapCoords.zoom, document.getElementById('image12'));
+    request_tile(mapCoords.x + 2, mapCoords.y, mapCoords.zoom, document.getElementById('image13'));
+    request_tile(mapCoords.x - 1, mapCoords.y + 1, mapCoords.zoom, document.getElementById('image20'));
+    request_tile(mapCoords.x, mapCoords.y + 1, mapCoords.zoom, document.getElementById('image21'));
+    request_tile(mapCoords.x + 1, mapCoords.y + 1, mapCoords.zoom, document.getElementById('image22'));
+    request_tile(mapCoords.x + 2, mapCoords.y + 1, mapCoords.zoom, document.getElementById('image23'));
+    drawPath_async(glassboro, hannah, canvas);
+    //drawPath_async(hannah,cadence,canvas);
+}
 function long2tile(lon,zoom) { return (Math.floor((lon+180)/360*Math.pow(2,zoom))); };
 function lat2tile(lat,zoom)  { return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom))); };
 
@@ -204,25 +204,26 @@ function draw(x,y,canvas) {
 
 function getPoint(point) {
     let geo_lon_low_bound = tile2long(mapCoords.x - 1,mapCoords.zoom);
-    let geo_lon_high_bound = tile2long(mapCoords.x + 2,mapCoords.zoom);
+    let geo_lon_high_bound = tile2long(mapCoords.x + 3,mapCoords.zoom);
     let geo_lat_high_bound = tile2lat(mapCoords.y - 1,mapCoords.zoom);
     let geo_lat_low_bound = tile2lat(mapCoords.y + 2,mapCoords.zoom);
-    let lat_offset = point[1] - tile2lat(mapCoords.y - 1,mapCoords.zoom);
-    let lat_arc = tile2lat(mapCoords.y + 2, mapCoords.zoom) - tile2lat(mapCoords.y - 1, mapCoords.zoom);
+    let lat_offset = point[1] - geo_lat_high_bound;
+    let lat_arc = geo_lat_low_bound - geo_lat_high_bound;
     let lon_offset = point[0] - geo_lon_low_bound;
-    let lon_arc = tile2long(mapCoords.x + 2, mapCoords.zoom) - geo_lon_low_bound;
+    let lon_arc = geo_lon_high_bound - geo_lon_low_bound;
     let x_offset = lon_offset/lon_arc;
     let y_offset = lat_offset/lat_arc;
     //TODO:fix to use absolute landmarks
     if(point[1] > geo_lat_low_bound && point[1] < geo_lat_high_bound
         && point[0] > geo_lon_low_bound && point[0] < geo_lon_high_bound){
+        console.log("offset", x_offset,",",y_offset);
         return [x_offset,y_offset];
     }
 }
 function drawPath([x1,y1],[x2,y2],canvas){
     let ctx = canvas.getContext("2d");
     ctx.beginPath();
-    console.log(canvas.width);
+    //console.log(canvas.width);
     ctx.moveTo(x1*canvas.width,y1*canvas.height);
     ctx.lineTo(x2*canvas.width,y2*canvas.height);
     ctx.stroke();

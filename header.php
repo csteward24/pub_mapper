@@ -1,24 +1,25 @@
-<!DOCTYPE-html>
 <html lang>
 <head>
 <title>Pub Map Test</title>
         <link rel = "stylesheet"   href ="./styles.css"/>
+        <link href="https://fonts.googleapis.com/css?family=Lato|Lobster|Montserrat|Roboto|Open+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
 
 </div>
 <div class = "headerContent">
         <div class = "logo">
-        <a href = "test.php"><img src = "./pub_crawl.png" alt = "Home"></a>
+        <a href = "home.php"><p>Pub Crawl</p></a>
         </div>
         <div class = "home">
-        <a href = "test.php"><img src = "./home.png" alt = "Home"></a>
+        <a href = "home.php"><p>Home</p></a>
 </div>
         <div class = "contact_us">
-        <a href = "contact_us.php"><img src = "./contact_us.png" alt = "Contact Us"></a>
+        <a href = "contact_us.php"><p>Contact Us</p></a>
         </div>
         <div class = "about_us">
-        <a href = "about_us.php"><img src = "./about_us.png" alt = "About Us"></a>
+        <a href = "about_us.php"><p>About Us</p></a>
         </div>
+
 
 

@@ -1,162 +1,200 @@
 .header{
-	text-align: center;
-	background: #000000;
-	margin-top:  -20px;
-	margin-right: auto;
-	margin-right: auto;
-	margin-bottom: -22px;
-	border-bottom: 3px solid #9050ed; 
+        text-align: center;
+        background: #000000;
+        margin-top:  -20px;
+        margin-right: auto;
+        margin-right: auto;
+        margin-bottom: -22px;
+        border-bottom: 3px solid #9050ed;
 }
 .headerContent{
-	background-color: #000000;
-	margin-right: -10px;
-	margin-left: -10px;
-	margin-top: -20px;
-	display: flex;
-	padding-bottom: 10px;
-	padding-top: 10px;
-	
+        background-color: #000000;
+        margin-right: -10px;
+        margin-left: -10px;
+        margin-top: -20px;
+        display: flex;
+        padding-left:50px;
+        padding-bottom: 20px;
+        padding-top: 10px;
+
 }
 .logo{
-	margin-left: 140px;
+        font-size: 320%;
+       font-family: 'Lobster', cursive;
+        margin-left: 160px;
+
 }
 .home{
-	margin-top: 12px;
-	margin-left: 240px;
+        font-size: 320%;
+        font-family: 'Lobster', cursive;
+        margin-left: 160px;
+        padding-left: 180px;
 }
 .contact_us{
-	margin-top: 12px;
-	margin-left:160px;
+        font-size: 320%;
+        font-family: 'Lobster', cursive;
+        margin-left:160px;
+        padding-left: 50px;
 }
 .about_us{
-	margin-top: 12px;
-	margin-left: 160px;
+        font-size: 320%;
+        font-family: 'Lobster', cursive;
+        margin-left: 160px;
+        padding-left: 50px;
 }
 .map{
-	margin-left: -10px;
-	margin-right: -10px;
-	margin-bottom: -12px;
+        margin-left: -10px;
+        margin-right: -10px;
+        margin-bottom: -12px;
 }
 .columnOne{
-	margin-left: 30px;
-	margin-top: 25px;
-	float: left;
-	width: 30.0%;
+
+        margin-left: 30px;
+        margin-top: 25px;
+        float: left;
+        width: 30.0%;
 }
 
 .footerText{
+        font-family: 'Monsterrat', sans-serif;
         padding-top: 10px;
         font-size: 20px;
-        line-height: 18px;
-        font-weight: normal;
+        line-height: 20px;
 }
 .contact{
+        font-family: 'Monsterrat', sans-serif;
         font-size: 22px;
         line-height: 20px;
         font-weight: bolder;
 }
 .contact-info{
+        font-family: 'Monsterrat', sans-serif;
         color: #ffffff;
         font-style: italic;
         font-weight: normal;
 }
 
 .columnTwo{
-	padding-left: 20px;
-	margin-top: 25px;
-	border-left: 1px solid white;
-        height: 280px; 	
-	text-align: center;
-	display: inline-block;
-	width: 30%;
-	margin-left: 90px;
-	
+        font-family: 'Monsterrat', sans-serif;
+        padding-left: 20px;
+        margin-top: 25px;
+        border-left: 1px solid white;
+        height: 280px;
+        text-align: center;
+        display: inline-block;
+        width: 30%;
+        margin-left: 90px;
+
 }
 .columnText{
-	font-size: 160%;
+        font-size: 160%;
 }
 .columnThree{
-	margin-right: 30px;
-	margin-top: 25px;
-	border-left: 1px solid white;
-	height: 280px;
-	text-align: right;
-	float: right;
-	width: 30%;
-	margin-left: 10px;
+        font-family: 'Monsterrat', sans-serif;
+        margin-right: 30px;
+        margin-top: 25px;
+        border-left: 1px solid white;
+        height: 280px;
+        text-align: right;
+        float: right;
+        width: 30%;
+        margin-left: 10px;
 }
 .links{
-	font-size: 150%;
-	list-style: none;
+        font-size: 150%;
+        list-style: none;
         padding: 0;
 }
 .links li{
-	font-size: 70%;
+        font-size: 70%;
         line-height: 25px;
 }
 
 .row:after {
-	content: "";
-	display: table;
-	clear: both;
-	}
+        content: "";
+        display: table;
+        clear: both;
+        }
 .footer{
-	
-	margin-left: -10px;
-	margin-right: -10px;
-	background-color: #000000;
+        padding-top: 60px;
+        margin-left: -10px;
+        margin-right: -10px;
+        background-color: #000000;
 }
 .footerContent{
-	margin-top: -8px;
-	padding-bottom: 5em;
-	color: #ffffff;
-	font-size: 12px;
-	line-height: 16px;
-	margin-bottom: -12px;
+ margin-top: -8px;
+        padding-bottom: 5em;
+        color: #ffffff;
+        font-size: 12px;
+        line-height: 16px;
+        margin-bottom: -12px;
 }
 .footerContent h3{
-	color: #ffffff;
-	font-size: 24px;
-	line-height: 30px;
-	margin-top: 62px;
+        color: #ffffff;
+        font-size: 24px;
+        line-height: 30px;
+        margin-top: 62px;
 }
 .social{
-	display: flex;
-	justify-content: space-between;
-	margin-top: 35px;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 35px;
 }
 a, a:visited{
-	color: #ffffff;
-	text-decoration: none;
+        color: #ffffff;
+        text-decoration: none;
 }
 a:hover, a:active{
-	color: #0e44f1;
+        color: #0e44f1;
 }
 .mainContent {
-	margin-top: -38px;
-	margin-bottom: -20px;
-	margin-left: -10px;
-	margin-right: -10px;
-	background-color: #000000;	
+
+        margin-bottom: -20px;
+        margin-left: -10px;
+        margin-right: -10px;
+        background-color: #ffffff;
+        padding-top: 3px;
+}
+.goalText {
+        font-family: 'Lato', sans-serif;
+        padding-top: 20px;
+        color: #000000;
+        font-size: 150%;
+        text-align: center;
 }
 .aboutUsTitle {
-	color: #ffffff; 
-	font-size: 200%;
-	text-align: center;
+        text-decoration: underline;
+        font-family: 'Lato', sans-serif;
+        color: #000000;
+        font-size: 200%;
+        text-align: center;
 }
 .drinkPhoto {
-	padding-bottom: 20px;
-	text-align: center;
+
+        padding-bottom: 20px;
+        text-align: center;
 }
 .aboutUsText {
-	font-size: 125%;
-	margin-left: 40px;
-	color: #ffffff;
+        text-align: center;
+        font-family: 'Lato', sans-serif;
+        font-size: 125%;
+        margin-left: 200px;
+        margin-right: 200px;
+        color: #000000;
+        padding-bottom: 30px;
 }
 .form {
-
-	font-size: 150%;
-	margin-top: 40px;
-	margin-bottom: 40px;
-	text-align: center;
+ font-family: 'Open Sans', serif;
+        font-size: 130%;
+        margin-top: 20px;
+        margin-bottom: 40px;
+        text-align: center;
 }
+.contactText{
+        font-family: 'Open Sans', serif;
+        font-size: 120%;
+        padding-top: 20px;
+        padding-bottom: 40px;
+        text-align: center;
+}
+

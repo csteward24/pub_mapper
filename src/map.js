@@ -111,12 +111,17 @@ window.onload = function(){
 async function drawPath_async(begin,end,canvas){
     await request_path_async(begin,end).then( value => {
         let canvas = document.getElementById("canvas");
-        canvas.height = 256 * document.getElementById("images").childElementCount;
-        canvas.width = 256 * document.getElementById("row1").childElementCount;
+        //canvas.height = 256 * document.getElementById("images").childElementCount;
+        //canvas.width = 256 * document.getElementById("row1").childElementCount;
         //console.log(value);
         value.forEach(function (item,index,array) {
-            drawPath(getPoint(array[index]),getPoint(array[index + 1]), canvas);
-            console.log(array[index]);
+            try {
+                drawPath(getPoint(array[index]), getPoint(array[index + 1]), canvas);
+                console.log(array[index]);
+            }
+            catch (e) {
+                console.error(e);
+            }
         });
     })
 }
@@ -178,8 +183,9 @@ function loadMap(canvas) {
     request_tile(mapCoords.x, mapCoords.y + 1, mapCoords.zoom, document.getElementById('image21'));
     request_tile(mapCoords.x + 1, mapCoords.y + 1, mapCoords.zoom, document.getElementById('image22'));
     request_tile(mapCoords.x + 2, mapCoords.y + 1, mapCoords.zoom, document.getElementById('image23'));
+    setCanvasSize(canvas);
     drawPath_async(glassboro, hannah, canvas);
-    //drawPath_async(hannah,cadence,canvas);
+    drawPath_async(cadence,landmark,canvas);
 }
 function long2tile(lon,zoom) { return (Math.floor((lon+180)/360*Math.pow(2,zoom))); };
 function lat2tile(lat,zoom)  { return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom))); };

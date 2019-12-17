@@ -1,33 +1,56 @@
 <script src="map.js"></script>
 <link rel="stylesheet" type="text/css" href="map.css">
 <body>
-    <button onclick="panLeft()"><--</button>
-    <button onclick="panUp()">^</button>
-    <button onclick="panDown()">v</button>
-    <button onclick="panRight()">--></button>
-    <button onclick="zoomIn()">+</button>
-    <button onclick="zoomOut()">-</button><br>
-    <div class="tile_wrapper">
-        <div class="tile_image" id="images">
-            <div class="tile_row" id="row1">
-                <img id="image00">
-                <img id="image01">
-                <img id="image02">
-                <img id="image03">
+    <div class="content">
+
+        <div class="tile_wrapper">
+            <div class="tile_image" id="images">
+                <div class="tile_row" id="row1">
+                    <img id="image00">
+                    <img id="image01">
+                    <img id="image02">
+                    <img id="image03">
+                </div>
+                <div class="tile_row" id="row2">
+                    <img id="image10">
+                    <img id="image11">
+                    <img id="image12">
+                    <img id="image13">
+                </div>
+                <div class="tile_row" id="row3">
+                    <img id="image20">
+                    <img id="image21">
+                    <img id="image22">
+                    <img id="image23">
+                </div>
             </div>
-            <div class="tile_row" id="row2">
-                <img id="image10">
-                <img id="image11">
-                <img id="image12">
-                <img id="image13">
+            <canvas class="tile_canvas" id="canvas"></canvas>
+        </div>
+        <div class="sidebar">
+            <div class="buttonWrapper">
+                <button onclick="panLeft()"><--</button>
+                <button onclick="panUp()">^</button>
+                <button onclick="panDown()">v</button>
+                <button onclick="panRight()">--></button>
+                <button onclick="zoomIn()">+</button>
+                <button onclick="zoomOut()">-</button><br>
             </div>
-            <div class="tile_row" id="row3">
-                <img id="image20">
-                <img id="image21">
-                <img id="image22">
-                <img id="image23">
+            <div class="entryWrapper" id="entry1">
+                <div class="entryIconWrapper">
+                    <input type="checkbox" class="check">
+                    <img src="../images/poi.png" class="entryIcon">
+                </div>
+                <div class="entryDetailWrapper">
+                    <p class="entryTitle">Landmark</p>
+                    <p class="entryDetails">Landmark location</p>
+                </div>
+            </div>
+            <div class="entryWrapper" id="entry2">
+                <input type="checkbox" class="check">
+                <img class="entryIcon">
+                <p class="entryTitle">Lorem Ipsum</p>
+                <p class="entryDetails">Loren Ipsum</p>
             </div>
         </div>
-        <canvas class="tile_canvas" id="canvas"></canvas>
     </div>
 </body>

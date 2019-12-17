@@ -9,6 +9,7 @@
     position: absolute;
     top:0px;
     left:0px;
+    display: block;
 }
 .tile_canvas{
     width: 100%;
@@ -16,8 +17,34 @@
     position: absolute;
     top:0px;
     left:0px;
-    /*background-color: rgba(255, 0, 0, 0.5);*/
 }
 .tile_row{
     display: flex;
+}
+.content{
+    display: flex;
+    flex-direction: row;
+}
+.sidebar{
+    display: flex;
+    flex-direction: column;
+}
+.buttonWrapper{
+    display: flex;
+    flex-direction: row;
+}
+.entryTitle{
+    font-weight: bold;
+}
+.entryWrapper{
+    display: flex;
+    flex-direction: row;
+}
+.entryIcon{
+    width: 1vw;
+    height: 1vw;
+}
+.entryIconWrapper{
+    display: flex;
+    flex-direction: column;
 }

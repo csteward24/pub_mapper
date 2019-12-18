@@ -28,6 +28,10 @@
 .sidebar{
     display: flex;
     flex-direction: column;
+    position: sticky;
+    height: 90vh;
+    top: 1vw;
+    padding-left: 1vw;
 }
 .buttonWrapper{
     display: flex;
@@ -35,10 +39,15 @@
 }
 .entryTitle{
     font-weight: bold;
+    margin: 0;
+}
+.entryDetails{
+    margin: 0;
 }
 .entryWrapper{
     display: flex;
     flex-direction: row;
+    padding: 1vh;
 }
 .entryIcon{
     width: 1vw;
@@ -47,4 +56,15 @@
 .entryIconWrapper{
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+.entryDetailWrapper{
+    display: flex;
+    flex-direction: column;
+    margin-left: 1vw;
+}
+.routeConfirm{
+    align-self: flex-end;
+}
+

@@ -21,11 +21,19 @@ const alcyon = {
 const orchard = {
     lat: 39.703843,
     lon: -75.078589
-}
+};
 const cadence = {
     lat: 39.755542,
     lon: -75.271213
-}
+};
+const chickies = {
+    lat: 39.705682,
+    lon: -75.113835
+};
+const bonesaw = {
+    lat: 39.713252,
+    lon: -75.135965
+};
 var mapCoords = {
     x: 0,
     y: 0,
@@ -45,7 +53,7 @@ var geoCoords = {
 var hannah = {
     lat: 39.420357,
     lon: -74.978147
-}
+};
 //TODO:refactor to use geo coords natively
 function updateOrigin(lat,lon,zoom) {
     geoCoords.lat = lat;
@@ -55,32 +63,13 @@ function updateOrigin(lat,lon,zoom) {
     mapCoords.y = lat2tile(lat,zoom);
     mapCoords.zoom = zoom;
 }
-function request_path(point_a,point_b){
-    var request = new XMLHttpRequest();
-    //TODO:move to php
-    request.open('GET', `https://api.openrouteservice.org/v2/directions/foot-walking?api_key=5b3ce3597851110001cf62484bf1694d7cec49f6bb7482f9d4ac8153&start=${point_a.lon},${point_a.lat}&end=${point_b.lon},${point_b.lat}`);
-
-    request.setRequestHeader('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
-
-    request.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            //console.log('Status:', this.status);
-            //console.log('Headers:', this.getAllResponseHeaders());
-            let coords = JSON.parse(this.responseText).features[0].geometry.coordinates[0];
-            console.log('Coords:', coords);
-            //TODO: Remove global state
-            waypoint.lon = coords[0];
-            waypoint.lat = coords[1];
-            waypoints =  JSON.parse(this.responseText).features[0].geometry.coordinates;
-            //console.log(waypoints);
-        }
-    };
-
-    request.send();
-}
 async function request_path_async(point_a,point_b) {
     return (await fetch(`https://api.openrouteservice.org/v2/directions/foot-walking?api_key=5b3ce3597851110001cf62484bf1694d7cec49f6bb7482f9d4ac8153&start=${point_a.lon},${point_a.lat}&end=${point_b.lon},${point_b.lat}`))
         .json().then(data => {return data.features[0].geometry.coordinates});
+}
+async function request_tile_async(x,y,zoom,element){
+    return (await fetch(`https://api.openrouteservice.org/mapsurfer/${zoom}/${x}/${y}.png?api_key=5b3ce3597851110001cf62484bf1694d7cec49f6bb7482f9d4ac8153`))
+        .then( x =>{console.log(x)});
 }
 function request_tile(x,y,zoom,element) {
     var request = new XMLHttpRequest();
@@ -92,16 +81,12 @@ function request_tile(x,y,zoom,element) {
 
     request.onreadystatechange = function () {
         if (this.readyState === 4) {
-            //console.log('Status:', this.status);
-            //console.log('Headers:', this.getAllResponseHeaders());
-            //console.log('Body:', this.responseText);
-            //console.log('url: ', this.responseURL);
             element.setAttribute('src', this.responseURL);
         }
     };
 
     request.send();
-};
+}
 window.onload = function(){
     let canvas = document.getElementById("canvas");
     setCanvasSize(canvas);
@@ -109,21 +94,22 @@ window.onload = function(){
     loadMap(canvas);
 };
 async function drawPath_async(begin,end,canvas){
-    await request_path_async(begin,end).then( value => {
-        let canvas = document.getElementById("canvas");
-        //canvas.height = 256 * document.getElementById("images").childElementCount;
-        //canvas.width = 256 * document.getElementById("row1").childElementCount;
-        //console.log(value);
-        value.forEach(function (item,index,array) {
-            try {
-                drawPath(getPoint(array[index]), getPoint(array[index + 1]), canvas);
-                console.log(array[index]);
-            }
-            catch (e) {
-                console.error(e);
-            }
-        });
-    })
+    await request_path_async(begin,end).then(x => drawPath(x));
+}
+function drawPath(path) {
+    let canvas = document.getElementById("canvas");
+    let geo_lon_low_bound = tile2long(mapCoords.x - 1,mapCoords.zoom);
+    let geo_lon_high_bound = tile2long(mapCoords.x + 3,mapCoords.zoom);
+    let geo_lat_high_bound = tile2lat(mapCoords.y - 1,mapCoords.zoom);
+    let geo_lat_low_bound = tile2lat(mapCoords.y + 2,mapCoords.zoom);
+    console.log(path);
+    path.forEach(function (item,index,array) {
+        if(index === array.size) return;
+        if(item[1] > geo_lat_low_bound && item[1] < geo_lat_high_bound
+            && item[0] > geo_lon_low_bound && item[0] < geo_lon_high_bound) {
+            drawSegment(getPoint(array[index]), getPoint(array[index + 1]), canvas);
+        }
+    });
 }
 function panLeft() {
     let canvas = document.getElementById("canvas");
@@ -184,8 +170,9 @@ function loadMap(canvas) {
     request_tile(mapCoords.x + 1, mapCoords.y + 1, mapCoords.zoom, document.getElementById('image22'));
     request_tile(mapCoords.x + 2, mapCoords.y + 1, mapCoords.zoom, document.getElementById('image23'));
     setCanvasSize(canvas);
-    drawPath_async(glassboro, hannah, canvas);
-    drawPath_async(cadence,landmark,canvas);
+    drawRoutes();
+    //drawPath_async(glassboro, hannah, canvas);
+    //drawPath_async(cadence,landmark,canvas);
 }
 function long2tile(lon,zoom) { return (Math.floor((lon+180)/360*Math.pow(2,zoom))); };
 function lat2tile(lat,zoom)  { return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom))); };
@@ -197,17 +184,6 @@ function tile2lat(y,z) {
     var n=Math.PI-2*Math.PI*y/Math.pow(2,z);
     return (180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));
 }
-
-function draw(x,y,canvas) {
-    let ctx = canvas.getContext("2d");
-    ctx.beginPath();
-    ctx.moveTo(x*canvas.width,0);
-    ctx.lineTo(x*canvas.width,canvas.height);
-    ctx.moveTo(0,y * canvas.height);
-    ctx.lineTo(canvas.width,y * canvas.height);
-    ctx.stroke();
-}
-
 function getPoint(point) {
     let geo_lon_low_bound = tile2long(mapCoords.x - 1,mapCoords.zoom);
     let geo_lon_high_bound = tile2long(mapCoords.x + 3,mapCoords.zoom);
@@ -220,16 +196,13 @@ function getPoint(point) {
     let x_offset = lon_offset/lon_arc;
     let y_offset = lat_offset/lat_arc;
     //TODO:fix to use absolute landmarks
-    if(point[1] > geo_lat_low_bound && point[1] < geo_lat_high_bound
-        && point[0] > geo_lon_low_bound && point[0] < geo_lon_high_bound){
-        console.log("offset", x_offset,",",y_offset);
-        return [x_offset,y_offset];
-    }
+    //console.log("offset", x_offset,",",y_offset);
+    return [x_offset,y_offset];
+
 }
-function drawPath([x1,y1],[x2,y2],canvas){
+function drawSegment([x1,y1], [x2,y2], canvas){
     let ctx = canvas.getContext("2d");
     ctx.beginPath();
-    //console.log(canvas.width);
     ctx.moveTo(x1*canvas.width,y1*canvas.height);
     ctx.lineTo(x2*canvas.width,y2*canvas.height);
     ctx.stroke();
@@ -237,4 +210,39 @@ function drawPath([x1,y1],[x2,y2],canvas){
 function setCanvasSize(canvas) {
     canvas.height = 256 * document.getElementById("images").childElementCount;
     canvas.width = 256 * document.getElementById("row1").childElementCount;
+}
+function drawRoutes() {
+    let routes = calculateAllRoutes();
+    console.log(routes);
+    console.log(routes[0]);
+    routes.forEach(x => x.then(x => drawPath(x)));
+}
+function getChecked() {
+    return Array.from(document.getElementsByClassName("check"))
+        .filter(element => {return element.checked}).map(elem => elem.id);
+}
+function calculateAllRoutes(){
+    const checkedSet = getChecked();
+    let promArr = [];
+    for (i = 0; i < checkedSet.length; i++){
+        for (j = 0; j < checkedSet.length; j++){
+            if (i !== j) {
+                promArr.push(request_path_async(getPointById(checkedSet[i]), getPointById(checkedSet[j])));
+            }
+        }
+    }
+    return promArr;
+}
+//arr is an array containing path info
+function cacheLen() {
+    let routes = calculateAllRoutes()
+}
+function getPointById(id) {
+    if(id === "Landmark")
+        return landmark;
+    if(id === "Chickies")
+        return chickies;
+    if(id === "Bonesaw")
+        return bonesaw;
+    throw "Invalid ID";
 }

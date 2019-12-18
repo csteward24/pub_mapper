@@ -21,11 +21,19 @@ const alcyon = {
 const orchard = {
     lat: 39.703843,
     lon: -75.078589
-}
+};
 const cadence = {
     lat: 39.755542,
     lon: -75.271213
-}
+};
+const chickies = {
+    lat: 39.705682,
+    lon: -75.113835
+};
+const bonesaw = {
+    lat: 39.713252,
+    lon: -75.135965
+};
 var mapCoords = {
     x: 0,
     y: 0,
@@ -86,20 +94,22 @@ window.onload = function(){
     loadMap(canvas);
 };
 async function drawPath_async(begin,end,canvas){
-    await request_path_async(begin,end).then( value => {
-        let canvas = document.getElementById("canvas");
-        let geo_lon_low_bound = tile2long(mapCoords.x - 1,mapCoords.zoom);
-        let geo_lon_high_bound = tile2long(mapCoords.x + 3,mapCoords.zoom);
-        let geo_lat_high_bound = tile2lat(mapCoords.y - 1,mapCoords.zoom);
-        let geo_lat_low_bound = tile2lat(mapCoords.y + 2,mapCoords.zoom);
-        value.forEach(function (item,index,array) {
-            if(index === array.size) return;
-            if(item[1] > geo_lat_low_bound && item[1] < geo_lat_high_bound
-                && item[0] > geo_lon_low_bound && item[0] < geo_lon_high_bound) {
-                drawPath(getPoint(array[index]), getPoint(array[index + 1]), canvas);
-            }
-        });
-    })
+    await request_path_async(begin,end).then(x => drawPath(x));
+}
+function drawPath(path) {
+    let canvas = document.getElementById("canvas");
+    let geo_lon_low_bound = tile2long(mapCoords.x - 1,mapCoords.zoom);
+    let geo_lon_high_bound = tile2long(mapCoords.x + 3,mapCoords.zoom);
+    let geo_lat_high_bound = tile2lat(mapCoords.y - 1,mapCoords.zoom);
+    let geo_lat_low_bound = tile2lat(mapCoords.y + 2,mapCoords.zoom);
+    console.log(path);
+    path.forEach(function (item,index,array) {
+        if(index === array.size) return;
+        if(item[1] > geo_lat_low_bound && item[1] < geo_lat_high_bound
+            && item[0] > geo_lon_low_bound && item[0] < geo_lon_high_bound) {
+            drawSegment(getPoint(array[index]), getPoint(array[index + 1]), canvas);
+        }
+    });
 }
 function panLeft() {
     let canvas = document.getElementById("canvas");
@@ -160,8 +170,9 @@ function loadMap(canvas) {
     request_tile(mapCoords.x + 1, mapCoords.y + 1, mapCoords.zoom, document.getElementById('image22'));
     request_tile(mapCoords.x + 2, mapCoords.y + 1, mapCoords.zoom, document.getElementById('image23'));
     setCanvasSize(canvas);
-    drawPath_async(glassboro, hannah, canvas);
-    drawPath_async(cadence,landmark,canvas);
+    drawRoutes();
+    //drawPath_async(glassboro, hannah, canvas);
+    //drawPath_async(cadence,landmark,canvas);
 }
 function long2tile(lon,zoom) { return (Math.floor((lon+180)/360*Math.pow(2,zoom))); };
 function lat2tile(lat,zoom)  { return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom))); };
@@ -173,17 +184,6 @@ function tile2lat(y,z) {
     var n=Math.PI-2*Math.PI*y/Math.pow(2,z);
     return (180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));
 }
-
-function draw(x,y,canvas) {
-    let ctx = canvas.getContext("2d");
-    ctx.beginPath();
-    ctx.moveTo(x*canvas.width,0);
-    ctx.lineTo(x*canvas.width,canvas.height);
-    ctx.moveTo(0,y * canvas.height);
-    ctx.lineTo(canvas.width,y * canvas.height);
-    ctx.stroke();
-}
-
 function getPoint(point) {
     let geo_lon_low_bound = tile2long(mapCoords.x - 1,mapCoords.zoom);
     let geo_lon_high_bound = tile2long(mapCoords.x + 3,mapCoords.zoom);
@@ -200,7 +200,7 @@ function getPoint(point) {
     return [x_offset,y_offset];
 
 }
-function drawPath([x1,y1],[x2,y2],canvas){
+function drawSegment([x1,y1], [x2,y2], canvas){
     let ctx = canvas.getContext("2d");
     ctx.beginPath();
     ctx.moveTo(x1*canvas.width,y1*canvas.height);
@@ -211,9 +211,38 @@ function setCanvasSize(canvas) {
     canvas.height = 256 * document.getElementById("images").childElementCount;
     canvas.width = 256 * document.getElementById("row1").childElementCount;
 }
-function route() {
-
+function drawRoutes() {
+    let routes = calculateAllRoutes();
+    console.log(routes);
+    console.log(routes[0]);
+    routes.forEach(x => x.then(x => drawPath(x)));
 }
 function getChecked() {
-    document.getElementsByClassName("check");
+    return Array.from(document.getElementsByClassName("check"))
+        .filter(element => {return element.checked}).map(elem => elem.id);
+}
+function calculateAllRoutes(){
+    const checkedSet = getChecked();
+    let promArr = [];
+    for (i = 0; i < checkedSet.length; i++){
+        for (j = 0; j < checkedSet.length; j++){
+            if (i !== j) {
+                promArr.push(request_path_async(getPointById(checkedSet[i]), getPointById(checkedSet[j])));
+            }
+        }
+    }
+    return promArr;
+}
+//arr is an array containing path info
+function cacheLen() {
+    let routes = calculateAllRoutes()
+}
+function getPointById(id) {
+    if(id === "Landmark")
+        return landmark;
+    if(id === "Chickies")
+        return chickies;
+    if(id === "Bonesaw")
+        return bonesaw;
+    throw "Invalid ID";
 }

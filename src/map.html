@@ -38,7 +38,7 @@
             <div class="entryWrapper" id="entry1">
                 <div class="entryIconWrapper">
                     <img src="../images/poi.png" class="entryIcon">
-                    <input type="checkbox" class="check">
+                    <input type="checkbox" class="check" id="Landmark">
                 </div>
                 <div class="entryDetailWrapper">
                     <p class="entryTitle">Landmark</p>
@@ -48,14 +48,25 @@
             <div class="entryWrapper" id="entry2">
                 <div class="entryIconWrapper">
                     <img src="../images/poi.png" class="entryIcon">
-                    <input type="checkbox" class="check">
+                    <input type="checkbox" class="check" id="Bonesaw">
                 </div>
                 <div class="entryDetailWrapper">
                     <p class="entryTitle">Bonesaw</p>
                     <p class="entryDetails">Bonesaw location</p>
                 </div>
             </div>
-            <button class="routeConfirm">Route!</button>
+            <div class="entryWrapper" id="entry3">
+                <div class="entryIconWrapper">
+                    <img src="../images/poi.png" class="entryIcon">
+                    <input type="checkbox" class="check" id="Chickies">
+                </div>
+                <div class="entryDetailWrapper">
+                    <p class="entryTitle">Chickie and Pete's</p>
+                    <p class="entryDetails">Chickie and Pete's location</p>
+                </div>
+            </div>
+            <button class="routeConfirm" onclick="drawRoutes()">Route!</button>
+            <button class="updateRoutes" onclick="calculateAllRoutes()">Update</button>
         </div>
     </div>
 </body>

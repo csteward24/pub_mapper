@@ -67,4 +67,6 @@
 .routeConfirm{
     align-self: flex-end;
 }
-
+.updateRoutes{
+    align-self: flex-end;
+}

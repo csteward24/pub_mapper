@@ -1,54 +1,25 @@
-<script>
-function resetForm(){
-         document.getElementById("contact_us").reset();
-         }
-</script>
-<form method="POST" action="contactus.php" name"contact_us" id="contact_us">
-      Name: <input type="text" name="name" required><br><br>
-      E-Mail: <input type="text" name="email" required><br><br>
-      Comment: <textarea form="contact_us" name="comment" required>Type your comment here</textarea><br><br>
-      <input id="submit" type="submit" disabled='true'>
-      <input type="reset" name="reset" value="Reset" onclick="resetForm()">
-</form>
 <?php
-function checkName($name) {
+//connect to DB
+$servername = "127.0.0.1";
+$username = "evansa9";
+$password = "00020615";
+$dbname = "evansa9";
 
-        $name = trim($name);
-        $name = stripslashes($name);
-        $name = htmlspecialchars($name);
+$connection = new mysqli($servername, $username, $password, $dbname);
 
-        if (empty($name)){
-        return false;
-        }else{
-        return true;
-        }}
-
-function checkEmail($email) {
-
-        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
-
-if (!$email){
-        $GLOBALS['emailError'] = "Please input a valid E-mail";
-        return false;
-        }else{
-        return true;
-        }}
-
-function checkComment($comment) {
-
-        $comment = stripslashes($comment);
-        $comment = htmlspecialchars($comment);
-
-if (empty($comment)){
-                return false;
-        }else{
-        return true;
-        }
+if ($connection->connect_error) {
+        die("Connection failed: " . $connection->connection_error);
 }
 
-$validName = $validEmail = $validComment = $validInput = false;
+//process post data
+$validInput = $validName = $validEmail = $validComment = false;
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
+$name='';
+$email='';
+$comment='';
+
+if ($_SERVER['REQUEST_METHOD'] === "POST") {
+
         $name = $_POST['name'];
         $email = $_POST['email'];
         $comment = $_POST['comment'];
@@ -57,25 +28,78 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $validEmail = checkEmail($email);
         $validComment = checkComment($comment);
 
-        $validInput = $validName && $validEmail && $validComment;
+	$validInput = $validName && $validEmail && $validComment;
 
+        $ip_address = $_SERVER['REMOTE_ADDR'];
+
+        $insertsql = "INSERT INTO contact_us (name, email, comment, ip_address) VALUES ('$name', '$email','$comment','$ip_address')";
+
+        if ($validInput && $connection->query($insertsql) === TRUE) {
+
+                echo "The following data has been submitted:<br>";
+                echo "Name: ".$name ."<br>";
+                echo "Email: ".$email ."<br>";
+                echo "Comment: ".$comment ."<br>";
+                echo "IP Address: " .$ip_address ."<br>";
+ 
+	}
+	else {
+                echo "Error has occured or input data is not valid.";
+	}
 }
 
-if($validInput) {
-	if($connection->query($innerSQL) == TRUE){
-        echo "Success: We will submit the following information<br>";
-        echo $_POST['name'] . "<br>";
-        echo $_POST['email'] . "<br>";
-	echo $_POST['comment'] . "<br>";
-	}
-	else{
-		echo "Error: " . "<br>" . $connection->error;
-	}
 
-	$connection->close();
-} else {
-        include 'formerror.php';
+else { ?>
 
+<form method="POST" action="./contactus.php?submit=true" name="contact" id="contact">
+     Name: <input type="text" name="name"><span style="color:red">*Name is required</span><br>
+     Email: <input type="email" name="email"><span style="color:red">*Email is required</span><br>
+     Comment: <input type="text" name="comment"><span style="color:red">*Comment is required</span><br>
+     <input type="submit" name="submit" value="Submit" id="submit_btn">
+     <input type="button" name="clear" value="Reset" onClick="resetForm()">
+</form>
+
+<?php
+}
+
+$connection->close();
+
+//check functions
+function checkEmail($email) {
+
+        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+        if (empty($email)){
+                $GLOBALS['emailError'] = "Please enter a valid email";
+                return false;
+        }
+        return true;
+}
+
+function checkName($name) {
+
+        $name = trim($name);
+        $name = stripslashes($name);
+        $name = htmlspecialchars($name);
+
+        if (empty($name)){
+                return false;
+        }
+        return true;
+}
+
+function checkComment($comment) {
+        $comment = stripslashes($comment);
+        $comment = htmlspecialchars($comment);
+
+        if(empty($comment)) {
+                return false;
+        }
+        return true;
 }
 ?>
-
+<script>
+function resetForm() {
+        document.getElementById("contact").reset();
+}
+</script>
